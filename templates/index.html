@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quote Hub</title>
+    <style>
+        body { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1497561813398-8fcc7a37b567?w=1920');
+            background-size: cover; color: white; font-family: sans-serif;
+            display: flex; flex-direction: column; align-items: center; padding: 50px;
+        }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; text-align: center; width: 600px; }
+        .history-item { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px; display: flex; justify-content: space-between; }
+        .time { font-size: 12px; color: #4ecca3; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Area of Interest</h2>
+        <form action="/generate" method="POST">
+            <select name="interest">
+                <option value="Wisdom">Wisdom</option>
+                <option value="Technology">Technology</option>
+                <option value="Motivational">Motivation</option>
+            </select>
+            <button type="submit">Generate Quote</button>
+        </form>
+
+        {% if current %}
+            <h3>"{{ current['content'] }}"</h3>
+            <p>— {{ current['author'] }}</p>
+        {% endif %}
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+        <h3>History (Date & Time)</h3>
+        {% for item in history %}
+        <div class="history-item">
+            <span>"{{ item['content'] }}"</span>
+            <span class="time">{{ item['timestamp'] }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
