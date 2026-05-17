@@ -1,12 +1,20 @@
 import sqlite3
 
-# This creates a fresh database with all the required columns
-conn = sqlite3.connect('quotes_history.db')
-conn.execute('''CREATE TABLE history 
-             (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-              content TEXT, 
-              author TEXT, 
-              category TEXT,
-              timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
-conn.close()
-print("Database created successfully with 'category' and 'timestamp' columns!")
+def setup_database():
+    conn = sqlite3.connect('quotes_history.db')
+    cursor = conn.cursor()
+    # Drop table if it exists to clean out previous column schema errors
+    cursor.execute('DROP TABLE IF EXISTS history')
+    # Build complete modern column structure
+    cursor.execute('''CREATE TABLE history 
+                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                  content TEXT, 
+                  author TEXT, 
+                  category TEXT,
+                  timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)''')
+    conn.commit()
+    conn.close()
+    print("Database schema built with content, author, and category columns!")
+
+if __name__ == '__main__':
+    setup_database()

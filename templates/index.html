@@ -1,45 +1,279 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Quote Hub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Quote Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body { 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                        url('https://images.unsplash.com/photo-1497561813398-8fcc7a37b567?w=1920');
-            background-size: cover; color: white; font-family: sans-serif;
-            display: flex; flex-direction: column; align-items: center; padding: 50px;
+            font-family: 'Poppins', sans-serif; 
+            /* NEW: Matches the exact atmospheric desk workspace background and deep gradient matching your reference */
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.6)), 
+                        url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start;
+            min-height: 100vh; 
+            padding: 40px 20px;
+            color: #ffffff;
         }
-        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; text-align: center; width: 600px; }
-        .history-item { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px; display: flex; justify-content: space-between; }
-        .time { font-size: 12px; color: #4ecca3; }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            max-width: 650px;
+        }
+
+        /* NEW: Deeper frosted glass effect with less translucency for high text contrast matching reference layout */
+        .box { 
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 40px; 
+            border-radius: 32px; 
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4); 
+            width: 100%; 
+            text-align: center;
+        }
+
+        .heading-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #10b981;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .box .heading-section {
+            justify-content: center;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .filter-section label {
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: #ffffff;
+        }
+
+        .filter-section select {
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #text { 
+            font-size: 1.45rem; 
+            line-height: 1.6; 
+            font-weight: 300;
+            color: #ffffff;
+            margin: 25px 0 15px 0;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        #author { 
+            font-size: 1.05rem; 
+            font-weight: 400; 
+            /* NEW: Brighter emerald for maximum visibility */
+            color: #10b981; 
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .clear-action-text {
+            color: #f43f5e;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 400;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 25px;
+            transition: opacity 0.2s;
+        }
+
+        .clear-action-text:hover { opacity: 0.8; text-decoration: underline; }
+
+        button { 
+            background: #ffffff; 
+            color: #000000; 
+            border: none; 
+            padding: 14px 45px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            font-size: 0.95rem; 
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        button:hover { 
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+        }
+ul { 
+    list-style: none; 
+    text-align: left;
+    padding-left: 0; /* Ensures clean alignment with the headers above */
+}
+
+        li { 
+            margin-bottom: 22px; 
+            font-size: 1.05rem; 
+            color: #ffffff;
+            line-height: 1.5;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding-bottom: 14px;
+        }
+
+        li:last-child { border: none; }
+
+        /* NEW: Dynamic text coloring for history feed items matching high-contrast design */
+        li small.author-lbl { 
+            /* Soft, vibrant light silver-blue for high contrast readability */
+            color: #cbd5e1; 
+            display: block; 
+            font-size: 0.88rem; 
+            margin-top: 8px; 
+            font-weight: 400;
+        }
+        
+        li span.meta-tag {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 3px 10px;
+            border-radius: 8px;
+            color: #ffffff; /* Bright white category tag text */
+            margin-left: 10px;
+            font-weight: 500;
+        }
+
+        .time-lbl { 
+            font-size: 0.82rem; 
+            /* Soft pastel lavender glow for clear dynamic visibility */
+            color: #d8b4fe; 
+            margin-left: 12px; 
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>Area of Interest</h2>
-        <form action="/generate" method="POST">
-            <select name="interest">
-                <option value="Wisdom">Wisdom</option>
-                <option value="Technology">Technology</option>
-                <option value="Motivational">Motivation</option>
-            </select>
-            <button type="submit">Generate Quote</button>
-        </form>
 
-        {% if current %}
-            <h3>"{{ current['content'] }}"</h3>
-            <p>— {{ current['author'] }}</p>
-        {% endif %}
-    </div>
+    <div class="wrapper">
+        <div class="box">
+            <div class="heading-section">
+                <span>✨</span> Quote Generator
+            </div>
 
-    <div class="card" style="margin-top: 20px;">
-        <h3>History (Date & Time)</h3>
-        {% for item in history %}
-        <div class="history-item">
-            <span>"{{ item['content'] }}"</span>
-            <span class="time">{{ item['timestamp'] }}</span>
+            <div class="filter-section">
+                <label for="categorySelect">Area of Interest:</label>
+                <select id="categorySelect">
+                    <option value="Inspirational">Inspirational</option>
+                    <option value="Success & Life">Success & Life</option>
+                    <option value="Wisdom">Wisdom</option>
+                    <option value="Motivation">Motivation</option>
+                    <option value="Discipline & Focus">Discipline & Focus</option>
+                    <option value="Leadership">Leadership</option>
+                    <option value="Creativity">Creativity</option>
+                </select>
+            </div>
+            
+            <p id="text">"Your limitation—it’s only your imagination."</p>
+            <h4 id="author">— Unknown</h4>
+            
+            <div>
+                <span id="clear-btn" class="clear-action-text">Clear History</span>
+            </div>
+            <div>
+                <button id="btn">Get Random Quote</button>
+            </div>
         </div>
-        {% endfor %}
+
+        <div class="box" style="text-align: left; padding: 35px 40px;">
+            <div class="heading-section">
+                <span>📋</span> Recently Viewed
+            </div>
+            <ul id="history"></ul>
+        </div>
     </div>
+
+    <script>
+        const btn = document.getElementById('btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const categorySelect = document.getElementById('categorySelect');
+        window.onload = fetchHistory;
+
+        btn.addEventListener('click', async () => {
+            btn.innerText = "Generating...";
+            const category = categorySelect.value;
+            try {
+                const res = await fetch(`/api/quote/random?category=${encodeURIComponent(category)}`);
+                const data = await res.json();
+                
+                document.getElementById('text').innerText = `"${data.text}"`;
+                document.getElementById('author').innerText = `— ${data.author}`;
+
+                fetchHistory(); 
+            } catch(e) {
+                console.error(e);
+            } finally {
+                btn.innerText = "Get Random Quote";
+            }
+        });
+
+        clearBtn.addEventListener('click', async () => {
+            if(confirm("Are you sure you want to clear your quote history?")) {
+                await fetch('/api/quote/clear', { method: 'POST' });
+                fetchHistory();
+            }
+        });
+
+        async function fetchHistory() {
+            try {
+                const res = await fetch('/api/quote/history');
+                const history = await res.json();
+                const list = document.getElementById('history');
+                if (history.length === 0) {
+                    list.innerHTML = '<li style="color: #cbd5e1; border: none; font-style: italic; font-size:0.9rem;">No recently viewed items recorded.</li>';
+                } else {
+                    list.innerHTML = history.map(q => `
+                        <li>
+                            "${q.text}" 
+                            <small class="author-lbl">— ${q.author} 
+                                <span class="meta-tag">${q.category}</span>
+                                <span class="time-lbl">${q.timestamp}</span>
+                            </small>
+                        </li>
+                    `).join('');
+                }
+            } catch(e) {
+                console.error("Failed to load history panel:", e);
+            }
+        }
+    </script>
 </body>
 </html>

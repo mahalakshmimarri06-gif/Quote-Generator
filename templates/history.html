@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Studio - History Logs</title>
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --accent: #2563eb; --border: #334155; }
+        [data-theme="light"] { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --accent: #2563eb; --border: #cbd5e1; }
+        [data-theme="sunset"] { --bg: #2d1b1b; --card: #452a2a; --text: #fbeee6; --accent: #e07a5f; --border: #5c3d3d; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s ease, color 0.3s ease; }
+        body { background-color: var(--bg); color: var(--text); font-family: system-ui, sans-serif; min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        
+        .container { width: 100%; max-width: 600px; }
+        .header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .link-btn { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 15px; }
+        
+        .theme-select button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; margin-right: 5px; }
+        
+        h2 { font-size: 24px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
+        .clear-btn { background: transparent; color: #ef4444; border: 1px solid #ef4444; padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .clear-btn:hover { background: rgba(239, 68, 68, 0.1); }
+
+        .history-item { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
+        .history-item p { font-size: 15px; line-height: 1.5; margin-bottom: 8px; }
+        .meta { display: flex; justify-content: space-between; font-size: 12px; color: #64748b; font-weight: 600; }
+        .empty-state { text-align: center; color: #64748b; margin-top: 5px; font-style: italic; padding: 40px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-nav">
+            <div class="theme-select">
+                <button onclick="setTheme('dark')">Dark</button>
+                <button onclick="setTheme('light')">Light</button>
+                <button onclick="setTheme('sunset')">Sunset</button>
+            </div>
+            <a href="/" class="link-btn">← Back to Generator</a>
+        </div>
+
+        <h2>
+            Saved Dashboard Logs
+            {% if history %}
+                <form action="/clear-history" method="POST">
+                    <button type="submit" class="clear-btn">Reset Database</button>
+                </form>
+            {% endif %}
+        </h2>
+
+        <div class="list-wrapper">
+            {% if history %}
+                {% for item in history %}
+                    <div class="history-item">
+                        <p>"{{ item.content }}"</p>
+                        <div class="meta">
+                            <span style="color: var(--accent);">#{{ item.category }}</span>
+                            <span>— {{ item.author }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">No quotes are saved in history logs yet.</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('user-theme', theme);
+        }
+        const savedTheme = localStorage.getItem('user-theme') || 'dark';
+        setTheme(savedTheme);
+    </script>
+</body>
+</html>

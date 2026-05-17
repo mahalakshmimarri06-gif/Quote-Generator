@@ -1,4 +1,4 @@
-import sqlite3
+mport sqlite3
 # Connect to the existing database
 conn = sqlite3.connect('quotes_history.db')
 cursor = conn.cursor()
